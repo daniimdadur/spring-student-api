@@ -1,0 +1,38 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+entity Student {
+  * id : string <<generated>>
+  --
+  * name : string
+  * email : string
+  * department_id : string <<FK>>
+}
+
+entity Department {
+  * id : string <<generated>>
+  --
+  * name : string
+}
+
+entity Enrollment {
+  * id : string <<generated>>
+  --
+  * student_id : string <<FK>>
+  * course_id : string <<FK>>
+  * grade : string
+}
+
+entity Course {
+  * id : string <<generated>>
+  --
+  * name : string
+  * code : string
+  * credit : number
+}
+
+Student }|--|| Department : "belongs to"
+Student ||--o{ Enrollment : "has"
+Enrollment }|--|| Course : "takes"
+@enduml

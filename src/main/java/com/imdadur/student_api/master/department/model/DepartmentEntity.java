@@ -1,0 +1,40 @@
+package com.imdadur.student_api.master.department.model;
+
+import com.imdadur.student_api.master.student.model.StudentEntity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "t_department")
+public class DepartmentEntity {
+
+    @Id
+    @Column
+    private String id;
+
+    @Column(name = "name")
+    private String name;
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentEntity> students = new ArrayList<>();
+
+    public void addStudent(StudentEntity student) {
+        students.add(student);
+        student.setDepartment(this);
+    }
+
+    public DepartmentEntity(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+}
