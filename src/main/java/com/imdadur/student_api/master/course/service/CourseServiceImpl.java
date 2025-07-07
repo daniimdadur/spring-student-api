@@ -1,5 +1,6 @@
 package com.imdadur.student_api.master.course.service;
 
+import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.course.model.CourseEntity;
 import com.imdadur.student_api.master.course.model.CourseReq;
@@ -57,6 +58,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Optional<CourseRes> update(CourseReq request, String id) {
         CourseEntity result = this.getEntityById(id);
+        validateCourse(request);
         BeanUtils.copyProperties(request, result);
 
         try {
@@ -97,10 +99,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private CourseEntity convertReqToEntity(CourseReq req) {
+        validateCourse(req);
         CourseEntity result = new CourseEntity();
         BeanUtils.copyProperties(req, result);
         result.setId(CommonUtil.getUUID());
         return result;
+    }
+
+    private void validateCourse(CourseReq req) {
+        this.courseRepo.findByCode(req.getCode())
+                .orElseThrow(() -> new BusinessException(String.format("course with code %s not found", req.getCode())));
     }
 
     private List<EnrollmentRes> convertEnrollmentEntityToRes(List<EnrollmentEntity> enrollments) {

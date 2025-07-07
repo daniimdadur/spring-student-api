@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface EnrollmentService {
     List<EnrollmentRes> get();
-    Optional<EnrollmentRes> getById(String  id);
+    Optional<EnrollmentRes> getById(String  studentId, String courseId);
     Optional<EnrollmentRes> save(EnrollmentReq request);
-    Optional<EnrollmentRes> update(EnrollmentReq request, String id);
-    Optional<EnrollmentRes> delete(String id);
+    Optional<EnrollmentRes> update(EnrollmentReq request, String studentId, String courseId);
+    Optional<EnrollmentRes> delete(String studentId, String courseId);
 }

@@ -1,6 +1,7 @@
 package com.imdadur.student_api.exception;
 
 import com.imdadur.student_api.base.ResponseError;
+import com.imdadur.student_api.util.CustomHttpStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,13 +41,13 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ResponseError> handleNullPointerException(NullPointerException ex) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ResponseError> handleBusinessException(BusinessException ex) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.CONFLICT)
                 .body(new ResponseError(
-                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        HttpStatus.INTERNAL_SERVER_ERROR.name(),
+                        CustomHttpStatus.DUPLICATE_KEY.getValue(),
+                        CustomHttpStatus.DUPLICATE_KEY.getName(),
                         ex.getMessage()
                 ));
     }

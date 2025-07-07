@@ -15,7 +15,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "t_course")
+@Table(name = "t_course", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "code")
+})
 public class CourseEntity {
 
     @Id

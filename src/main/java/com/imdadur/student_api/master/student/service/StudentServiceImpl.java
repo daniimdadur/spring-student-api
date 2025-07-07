@@ -1,5 +1,6 @@
 package com.imdadur.student_api.master.student.service;
 
+import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.department.repo.DepartmentRepo;
@@ -106,6 +107,7 @@ public class StudentServiceImpl implements StudentService {
     private StudentEntity convertReqToEntity(StudentReq req) {
         DepartmentEntity department = departmentRepo.findById(req.getDepartmentId())
                 .orElseThrow(() -> new NotFoundException("Department with id " + req.getDepartmentId() + " not found"));
+        validateStudent(req);
 
         StudentEntity result = new StudentEntity();
         BeanUtils.copyProperties(req, result);
@@ -115,11 +117,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private void convertReqToEntity(StudentReq request, StudentEntity entity) {
+        validateStudent(request);
         BeanUtils.copyProperties(request, entity);
 
         DepartmentEntity department = departmentRepo.findById(request.getDepartmentId())
                 .orElseThrow(() -> new NotFoundException("department with id " + request.getDepartmentId() + " not found"));
         entity.setDepartment(department);
+    }
+
+    private void validateStudent(StudentReq request) {
+        this.studentRepo.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BusinessException(String.format("student with email %s already exists", request.getEmail())));
     }
 
     private List<EnrollmentRes> convertEnrollmentEntityToRes(List<EnrollmentEntity> enrollments) {
