@@ -1,19 +1,19 @@
 package com.imdadur.student_api.master.enrollment.model;
 
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
+@Embeddable
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnrollmentRes {
-    private EnrollmentId id;
-    private String studentId;
-    private String studentName;
-    private String courseId;
-    private String courseName;
-    private String grade;
+public class EnrollmentId implements Serializable {
+    private String enrollmentStudentId;
+    private String enrollmentCourseId;
 }

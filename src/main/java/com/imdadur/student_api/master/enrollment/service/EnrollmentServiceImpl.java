@@ -4,6 +4,7 @@ import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.course.model.CourseEntity;
 import com.imdadur.student_api.master.course.repo.CourseRepo;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
+import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentReq;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentRes;
 import com.imdadur.student_api.master.enrollment.repo.EnrollmentRepo;
@@ -39,8 +40,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Optional<EnrollmentRes> getById(String id) {
-        EnrollmentEntity result = this.getEntityById(id);
+    public Optional<EnrollmentRes> getById(String studentId, String courseId) {
+        EnrollmentEntity result = this.getEntityById(studentId, courseId);
 
         return Optional.of(convertEntityToRes(result));
     }
@@ -58,8 +59,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Optional<EnrollmentRes> update(EnrollmentReq request, String id) {
-        EnrollmentEntity result = this.getEntityById(id);
+    public Optional<EnrollmentRes> update(EnrollmentReq request, String studentId, String courseId) {
+        EnrollmentEntity result = this.getEntityById(studentId, courseId);
         convertReqToEntity(request, result);
 
         try {
@@ -71,8 +72,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Optional<EnrollmentRes> delete(String id) {
-        EnrollmentEntity result = this.getEntityById(id);
+    public Optional<EnrollmentRes> delete(String studentId, String courseId) {
+        EnrollmentEntity result = this.getEntityById(studentId, courseId);
 
         try {
             this.enrollmentRepo.delete(result);
@@ -97,9 +98,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         return result;
     }
 
-    private EnrollmentEntity getEntityById(String id) {
-        EnrollmentEntity result = this.enrollmentRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("enrollment with id " + id + " not found"));
+    private EnrollmentEntity getEntityById(String studentId, String courseId) {
+        EnrollmentId enrollmentId = new EnrollmentId(studentId, courseId);
+
+        EnrollmentEntity result = this.enrollmentRepo.existsById(enrollmentId)
+                .orElseThrow(() -> new NotFoundException(String.format("Enrollment with id %s not found", enrollmentId)));
 
         return result;
     }
@@ -113,7 +116,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         EnrollmentEntity result = new EnrollmentEntity();
         BeanUtils.copyProperties(req, result);
-        result.setId(CommonUtil.getUUID());
         result.setStudent(student);
         result.setCourse(course);
         return result;

@@ -1,5 +1,6 @@
 package com.imdadur.student_api.master.department.service;
 
+import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.department.model.DepartmentReq;
@@ -57,6 +58,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Optional<DepartmentRes> update(DepartmentReq request, String id) {
         DepartmentEntity result = this.getEntityById(id);
+        validateDepartment(request);
         BeanUtils.copyProperties(request, result);
 
         try {
@@ -99,9 +101,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentEntity convertReqToEntity(DepartmentReq req) {
         DepartmentEntity result = new DepartmentEntity();
+        validateDepartment(req);
         BeanUtils.copyProperties(req, result);
         result.setId(CommonUtil.getUUID());
         return result;
+    }
+
+    private void validateDepartment(DepartmentReq req) {
+        if (this.departmentRepo.existsByName(req.getName())) {
+            throw new BusinessException(String.format("department name %s already exists", req.getName()));
+        }
     }
 
     private List<StudentRes> convertEntityToStudentRes(List<StudentEntity> students) {

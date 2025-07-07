@@ -5,6 +5,7 @@ import com.imdadur.student_api.master.course.repo.CourseRepo;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.department.repo.DepartmentRepo;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
+import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
 import com.imdadur.student_api.master.enrollment.repo.EnrollmentRepo;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import com.imdadur.student_api.master.student.repo.StudentRepo;
@@ -49,15 +50,21 @@ public class DbInit implements CommandLineRunner {
         CourseEntity javascript = new CourseEntity("45d0h6bd3g77779fba6i90h1fgi69bf3", "javascript basics", "J004", 3);
         CourseEntity html = new CourseEntity("56e1i7ce4h88880gcb7j01i2ghj70cg4", "html & css", "H005", 2);
 
-        EnrollmentEntity brunoJava = new EnrollmentEntity("0121fbb4389c4a6284771408f21546d5", "A");
+        EnrollmentId brunoJavaId = new EnrollmentId("115286a6a53f4dca9ae980d69e84374f", "94d432c7d0944c259560cdf658ac8888");
+        EnrollmentId aliceJavaId = new EnrollmentId("225386b7b64e5edbaf091e70a7f95485", "94d432c7d0944c259560cdf658ac8888");
+        EnrollmentId bobJavaId = new EnrollmentId("335486c8c75f6fecb0a82f81b8e06596", "94d432c7d0944c259560cdf658ac8888");
+        EnrollmentId carolJavaId = new EnrollmentId("445586d9d8607gfd0b93g92c9f1767a7", "94d432c7d0944c259560cdf658ac8888");
+        EnrollmentId daveJavaId = new EnrollmentId("556686e0e9718hge1c04h03d0g2878b8", "94d432c7d0944c259560cdf658ac8888");
 
-        EnrollmentEntity aliceJava = new EnrollmentEntity("1012oll4389c4a6284771408f21546e6", "A-");
+        EnrollmentEntity brunoJava = new EnrollmentEntity(brunoJavaId, "A");
 
-        EnrollmentEntity bobJava = new EnrollmentEntity("2023yvv4389c4a6284771408f21546f7", "B");
+        EnrollmentEntity aliceJava = new EnrollmentEntity(aliceJavaId, "A-");
 
-        EnrollmentEntity carolJava = new EnrollmentEntity("3034iff4389c4a6284771408f21546g8", "A");
+        EnrollmentEntity bobJava = new EnrollmentEntity(bobJavaId, "B");
 
-        EnrollmentEntity daveJava = new EnrollmentEntity("4045spp4389c4a6284771408f21546h9", "B+");
+        EnrollmentEntity carolJava = new EnrollmentEntity(carolJavaId, "A");
+
+        EnrollmentEntity daveJava = new EnrollmentEntity(daveJavaId, "B+");
 
         List<StudentEntity> studentList = new ArrayList<>();
         studentList.add(bruno);

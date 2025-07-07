@@ -15,7 +15,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "t_department")
+@Table(name = "t_department", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")
+})
 public class DepartmentEntity {
 
     @Id
