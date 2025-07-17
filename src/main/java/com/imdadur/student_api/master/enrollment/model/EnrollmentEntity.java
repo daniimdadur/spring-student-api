@@ -4,14 +4,12 @@ import com.imdadur.student_api.master.student.model.StudentEntity;
 import com.imdadur.student_api.master.course.model.CourseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "t_enrollment")
@@ -21,19 +19,13 @@ public class EnrollmentEntity {
     @EmbeddedId
     private EnrollmentId id;
 
-    @Column(name = "student_id", insertable = false, updatable = false)
-    private String studentId;
-
     @ManyToOne
-    @MapsId("enrollmentStudentId")
+    @MapsId("studentId")
     @JoinColumn(name = "student_id")
     private StudentEntity student;
 
-    @Column(name = "course_id", insertable = false, updatable = false)
-    private String courseId;
-
     @ManyToOne
-    @MapsId("enrollmentCourseId")
+    @MapsId("courseId")
     @JoinColumn(name = "course_id")
     private CourseEntity course;
 
@@ -43,5 +35,12 @@ public class EnrollmentEntity {
     public EnrollmentEntity(EnrollmentId id, String grade) {
         this.id = id;
         this.grade = grade;
+    }
+
+    public EnrollmentEntity(StudentEntity student, CourseEntity course, String grade) {
+        this.student = student;
+        this.course = course;
+        this.grade = grade;
+        this.id = new EnrollmentId(student.getId(), course.getId());
     }
 }

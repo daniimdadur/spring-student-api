@@ -117,7 +117,9 @@ public class CourseServiceImpl implements CourseService {
         for (EnrollmentEntity enrollmentEntity : enrollments) {
             EnrollmentRes res = new EnrollmentRes();
             BeanUtils.copyProperties(enrollmentEntity, res);
+            res.setStudentId(enrollmentEntity.getStudent().getId());
             res.setStudentName(enrollmentEntity.getStudent().getName());
+            res.setCourseId(enrollmentEntity.getCourse().getId());
             res.setCourseName(enrollmentEntity.getCourse().getName());
             result.add(res);
         }

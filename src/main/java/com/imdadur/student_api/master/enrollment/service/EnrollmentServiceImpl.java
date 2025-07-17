@@ -1,5 +1,6 @@
 package com.imdadur.student_api.master.enrollment.service;
 
+import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.course.model.CourseEntity;
 import com.imdadur.student_api.master.course.repo.CourseRepo;
@@ -8,6 +9,7 @@ import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentReq;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentRes;
 import com.imdadur.student_api.master.enrollment.repo.EnrollmentRepo;
+import com.imdadur.student_api.master.enrollment.validator.EnrollmentValidator;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import com.imdadur.student_api.master.student.repo.StudentRepo;
 import com.imdadur.student_api.util.CommonUtil;
@@ -28,6 +30,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final EnrollmentRepo enrollmentRepo;
     private final StudentRepo studentRepo;
     private final CourseRepo courseRepo;
+    private final EnrollmentValidator validator;
 
     @Override
     public List<EnrollmentRes> get() {
@@ -61,13 +64,26 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public Optional<EnrollmentRes> update(EnrollmentReq request, String studentId, String courseId) {
         EnrollmentEntity result = this.getEntityById(studentId, courseId);
-        convertReqToEntity(request, result);
 
-        try {
-            this.enrollmentRepo.save(result);
-            return Optional.of(convertEntityToRes(result));
-        } catch (Exception e) {
-            return Optional.empty();
+        if (this.validator.isSameId(request, result)) {
+            result.setGrade(request.getGrade());
+
+            try {
+                this.enrollmentRepo.save(result);
+                return Optional.of(convertEntityToRes(result));
+            } catch (Exception e) {
+                return Optional.empty();
+            }
+        } else {
+            this.enrollmentRepo.delete(result);
+            EnrollmentEntity enrollment = this.convertReqToEntity(request);
+
+            try {
+                this.enrollmentRepo.save(enrollment);
+                return Optional.of(convertEntityToRes(enrollment));
+            } catch (Exception e) {
+                return Optional.empty();
+            }
         }
     }
 
@@ -86,11 +102,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRes convertEntityToRes(EnrollmentEntity entity) {
         EnrollmentRes result = new EnrollmentRes();
         BeanUtils.copyProperties(entity, result);
-        if (entity.getCourseId() != null) {
+        if (entity.getCourse().getId() != null) {
             result.setCourseId(entity.getCourse().getId());
             result.setCourseName(entity.getCourse().getName());
         }
-        if (entity.getStudentId() != null) {
+        if (entity.getStudent().getId() != null) {
             result.setStudentId(entity.getStudent().getId());
             result.setStudentName(entity.getStudent().getName());
         }
@@ -101,35 +117,23 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentEntity getEntityById(String studentId, String courseId) {
         EnrollmentId enrollmentId = new EnrollmentId(studentId, courseId);
 
-        EnrollmentEntity result = this.enrollmentRepo.existsById(enrollmentId)
-                .orElseThrow(() -> new NotFoundException(String.format("Enrollment with id %s not found", enrollmentId)));
+        EnrollmentEntity result = this.enrollmentRepo.findById(enrollmentId)
+                .orElseThrow(() -> new NotFoundException(String.format("enrollment with id %s not found", enrollmentId)));
 
         return result;
     }
 
     private EnrollmentEntity convertReqToEntity(EnrollmentReq req) {
-        StudentEntity student = studentRepo.findById(req.getStudentId())
-                .orElseThrow(() -> new NotFoundException("student with id " + req.getStudentId() + " not found"));
+        if (this.validator.isDuplicate(req)) {
+            throw new BusinessException("enrollment already exists");
+        } else {
+            StudentEntity student = studentRepo.findById(req.getStudentId())
+                    .orElseThrow(() -> new NotFoundException(String.format("student with id %s not found", req.getStudentId())));
 
-        CourseEntity course = courseRepo.findById(req.getCourseId())
-                .orElseThrow(() -> new NotFoundException("course with id " + req.getCourseId() + " not found"));
+            CourseEntity course = courseRepo.findById(req.getCourseId())
+                    .orElseThrow(() -> new NotFoundException(String.format("course with id %s not found", req.getCourseId())));
 
-        EnrollmentEntity result = new EnrollmentEntity();
-        BeanUtils.copyProperties(req, result);
-        result.setStudent(student);
-        result.setCourse(course);
-        return result;
-    }
-
-    private void convertReqToEntity(EnrollmentReq req, EnrollmentEntity entity) {
-        StudentEntity student = studentRepo.findById(req.getStudentId())
-                .orElseThrow(() -> new NotFoundException("student with id " + req.getStudentId() + " not found"));
-
-        CourseEntity course = courseRepo.findById(req.getCourseId())
-                .orElseThrow(() -> new NotFoundException("course with id " + req.getCourseId() + " not found"));
-
-        BeanUtils.copyProperties(req, entity);
-        entity.setStudent(student);
-        entity.setCourse(course);
+            return new EnrollmentEntity(student, course, req.getGrade());
+        }
     }
 }

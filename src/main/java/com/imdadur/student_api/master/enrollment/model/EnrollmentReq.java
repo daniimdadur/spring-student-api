@@ -2,13 +2,11 @@ package com.imdadur.student_api.master.enrollment.model;
 
 import com.imdadur.student_api.anotation.ValidGrade;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnrollmentReq {
