@@ -86,7 +86,7 @@ public class StudentServiceImpl implements StudentService {
     private StudentRes convertEntityToRes(StudentEntity entity) {
         StudentRes result = new StudentRes();
         BeanUtils.copyProperties(entity, result);
-        if (entity.getDepartment() != null) {
+        if (entity.getDepartment().getId() != null) {
             result.setDepartmentId(entity.getDepartment().getId());
             result.setDepartmentName(entity.getDepartment().getName());
         }
@@ -98,10 +98,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private StudentEntity getEntityById(String id) {
-        StudentEntity result = this.studentRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("student with id " + id + " not found"));
 
-        return result;
+        return this.studentRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("student with id " + id + " not found"));
     }
 
     private StudentEntity convertReqToEntity(StudentReq req) {
@@ -135,7 +134,9 @@ public class StudentServiceImpl implements StudentService {
         for (EnrollmentEntity enrollmentEntity : enrollments) {
             EnrollmentRes res = new EnrollmentRes();
             BeanUtils.copyProperties(enrollmentEntity, res);
+            res.setStudentId(enrollmentEntity.getStudent().getId());
             res.setStudentName(enrollmentEntity.getStudent().getName());
+            res.setCourseId(enrollmentEntity.getCourse().getId());
             res.setCourseName(enrollmentEntity.getCourse().getName());
             result.add(res);
         }

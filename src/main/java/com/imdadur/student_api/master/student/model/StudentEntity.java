@@ -30,20 +30,12 @@ public class StudentEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "department_id", insertable = false, updatable = false)
-    private String departmentId;
-
     @JoinColumn(name = "department_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private DepartmentEntity department;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<EnrollmentEntity> enrollments = new ArrayList<>();
-
-    public void addEnrollment(EnrollmentEntity enrollment) {
-        enrollments.add(enrollment);
-        enrollment.setStudent(this);
-    }
 
     public StudentEntity(String id, String name, String email) {
         this.id = id;

@@ -36,11 +36,6 @@ public class CourseEntity {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<EnrollmentEntity> enrollments = new ArrayList<>();
 
-    public void addEnrollmentFromCourse(EnrollmentEntity enrollment) {
-        enrollments.add(enrollment);
-        enrollment.setCourse(this);
-    }
-
     public CourseEntity(String id, String name, String code, Integer credit) {
         this.id = id;
         this.name = name;

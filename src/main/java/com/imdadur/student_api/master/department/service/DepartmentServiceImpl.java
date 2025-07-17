@@ -118,6 +118,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         for (StudentEntity studentEntity : students) {
             StudentRes studentRes = new StudentRes();
             BeanUtils.copyProperties(studentEntity, studentRes);
+            studentRes.setDepartmentId(studentEntity.getDepartment().getId());
             studentRes.setDepartmentName(studentEntity.getDepartment().getName());
             result.add(studentRes);
         }

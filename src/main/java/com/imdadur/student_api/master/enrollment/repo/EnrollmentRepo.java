@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EnrollmentRepo extends JpaRepository<EnrollmentEntity, String > {
-    Optional<EnrollmentEntity> existsById(EnrollmentId id);
+public interface EnrollmentRepo extends JpaRepository<EnrollmentEntity, EnrollmentId> {
 }
