@@ -18,7 +18,6 @@ public class EnrollmentValidator {
     }
 
     public boolean isDuplicate(EnrollmentReq request) {
-        EnrollmentId enrollmentId = new EnrollmentId(request.getStudentId(), request.getCourseId());
-        return this.enrollmentRepo.existsById(enrollmentId);
+        return this.enrollmentRepo.existsById(new EnrollmentId(request.getStudentId(), request.getCourseId()));
     }
 }

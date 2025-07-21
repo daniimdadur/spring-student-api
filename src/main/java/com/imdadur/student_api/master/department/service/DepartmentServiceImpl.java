@@ -2,6 +2,7 @@ package com.imdadur.student_api.master.department.service;
 
 import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
+import com.imdadur.student_api.master.department.mapper.DepartmentMapper;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.department.model.DepartmentReq;
 import com.imdadur.student_api.master.department.model.DepartmentRes;
@@ -22,50 +23,44 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepo departmentRepo;
+    private final DepartmentMapper mapper;
 
     @Override
     public List<DepartmentRes> get() {
-        List<DepartmentEntity> result = departmentRepo.findAll();
-        if (result.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return result.stream().map(this::convertEntityToRes).collect(Collectors.toList());
+        return this.mapper.toResponseList(this.departmentRepo.findAll());
     }
 
     @Override
     public Optional<DepartmentRes> getById(String id) {
         DepartmentEntity result = this.getEntityById(id);
 
-        return Optional.of(this.convertEntityToRes(result));
+        return Optional.of(this.mapper.toResponse(result));
     }
 
     @Override
     public Optional<DepartmentRes> save(DepartmentReq request) {
-        DepartmentEntity result = this.convertReqToEntity(request);
+        DepartmentEntity result = this.mapper.toEntity(request);
 
         try {
             this.departmentRepo.save(result);
-            return Optional.of(this.convertEntityToRes(result));
+            return Optional.of(this.mapper.toResponse(result));
         } catch (Exception e) {
-            return Optional.empty();
+            throw new RuntimeException("save department failed", e);
         }
     }
 
     @Override
     public Optional<DepartmentRes> update(DepartmentReq request, String id) {
-        DepartmentEntity result = this.getEntityById(id);
-        validateDepartment(request);
-        BeanUtils.copyProperties(request, result);
+        DepartmentEntity entity = this.getEntityById(id);
+        DepartmentEntity result = this.mapper.toEntity(request, entity);
 
         try {
             this.departmentRepo.save(result);
-            return Optional.of(this.convertEntityToRes(result));
+            return Optional.of(this.mapper.toResponse(result));
         } catch (Exception e) {
-            return Optional.empty();
+            throw new RuntimeException("update department failed", e);
         }
     }
 
@@ -75,54 +70,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         try {
             this.departmentRepo.delete(result);
-            return Optional.of(this.convertEntityToRes(result));
+            return Optional.of(this.mapper.toResponse(result));
         } catch (Exception e) {
-            return Optional.empty();
+            throw new RuntimeException("delete department failed", e);
         }
-    }
-
-    private DepartmentRes convertEntityToRes(DepartmentEntity entity) {
-        DepartmentRes result = new DepartmentRes();
-        BeanUtils.copyProperties(entity, result);
-
-        if (entity.getStudents() != null) {
-            result.setStudents(convertEntityToStudentRes(entity.getStudents()));
-        }
-
-        return result;
     }
 
     private DepartmentEntity getEntityById(String id) {
-        DepartmentEntity result = this.departmentRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("department with id " + id + " not found"));
 
-        return result;
-    }
-
-    private DepartmentEntity convertReqToEntity(DepartmentReq req) {
-        DepartmentEntity result = new DepartmentEntity();
-        validateDepartment(req);
-        BeanUtils.copyProperties(req, result);
-        result.setId(CommonUtil.getUUID());
-        return result;
-    }
-
-    private void validateDepartment(DepartmentReq req) {
-        if (this.departmentRepo.existsByName(req.getName())) {
-            throw new BusinessException(String.format("department name %s already exists", req.getName()));
-        }
-    }
-
-    private List<StudentRes> convertEntityToStudentRes(List<StudentEntity> students) {
-        List<StudentRes> result = new ArrayList<>();
-        for (StudentEntity studentEntity : students) {
-            StudentRes studentRes = new StudentRes();
-            BeanUtils.copyProperties(studentEntity, studentRes);
-            studentRes.setDepartmentId(studentEntity.getDepartment().getId());
-            studentRes.setDepartmentName(studentEntity.getDepartment().getName());
-            result.add(studentRes);
-        }
-
-        return result;
+        return this.departmentRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("department with id %s not found", id)));
     }
 }

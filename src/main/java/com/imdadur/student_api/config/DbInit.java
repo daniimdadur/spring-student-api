@@ -94,7 +94,6 @@ public class DbInit implements CommandLineRunner {
             this.departmentRepo.saveAll(departmentList);
             this.courseRepo.saveAll(courseList);
             this.studentRepo.saveAll(studentList);
-            log.info("dbinit saved");
         } catch (Exception e) {
             log.error("dbinit save failed, error: {}", e.getMessage());
         }
@@ -115,7 +114,6 @@ public class DbInit implements CommandLineRunner {
 
         try {
             this.enrollmentRepo.saveAll(enrollmentList);
-            log.info("enrollments in db init saved");
         } catch (Exception e) {
             log.error("saved enrollments in db init failed, error: {}", e.getMessage());
         }
