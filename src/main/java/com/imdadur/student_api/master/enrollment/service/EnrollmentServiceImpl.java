@@ -4,6 +4,7 @@ import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.course.model.CourseEntity;
 import com.imdadur.student_api.master.course.repo.CourseRepo;
+import com.imdadur.student_api.master.enrollment.mapper.EnrollmentMapper;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentReq;
@@ -13,6 +14,7 @@ import com.imdadur.student_api.master.enrollment.validator.EnrollmentValidator;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import com.imdadur.student_api.master.student.repo.StudentRepo;
 import com.imdadur.student_api.util.CommonUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -28,40 +30,35 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EnrollmentServiceImpl implements EnrollmentService {
     private final EnrollmentRepo enrollmentRepo;
-    private final StudentRepo studentRepo;
-    private final CourseRepo courseRepo;
     private final EnrollmentValidator validator;
+    private final EnrollmentMapper mapper;
 
     @Override
     public List<EnrollmentRes> get() {
-        List<EnrollmentEntity> result = enrollmentRepo.findAll();
-        if (result.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return result.stream().map(this::convertEntityToRes).collect(Collectors.toList());
+        return this.mapper.toResponseList(this.enrollmentRepo.findAll());
     }
 
     @Override
     public Optional<EnrollmentRes> getById(String studentId, String courseId) {
         EnrollmentEntity result = this.getEntityById(studentId, courseId);
 
-        return Optional.of(convertEntityToRes(result));
+        return Optional.of(this.mapper.toResponse(result));
     }
 
     @Override
     public Optional<EnrollmentRes> save(EnrollmentReq request) {
-        EnrollmentEntity result = this.convertReqToEntity(request);
+        EnrollmentEntity result = this.mapper.toEntity(request);
 
         try {
             this.enrollmentRepo.save(result);
-            return Optional.of(convertEntityToRes(result));
+            return Optional.of(this.mapper.toResponse(result));
         } catch (Exception e) {
-            return Optional.empty();
+            throw new RuntimeException("save enrollment failed");
         }
     }
 
     @Override
+    @Transactional
     public Optional<EnrollmentRes> update(EnrollmentReq request, String studentId, String courseId) {
         EnrollmentEntity result = this.getEntityById(studentId, courseId);
 
@@ -70,19 +67,18 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
             try {
                 this.enrollmentRepo.save(result);
-                return Optional.of(convertEntityToRes(result));
+                return Optional.of(this.mapper.toResponse(result));
             } catch (Exception e) {
-                return Optional.empty();
+                throw new RuntimeException("enrollment update failed");
             }
         } else {
-            this.enrollmentRepo.delete(result);
-            EnrollmentEntity enrollment = this.convertReqToEntity(request);
-
+            EnrollmentEntity enrollment = this.mapper.toEntity(request);
             try {
+                this.enrollmentRepo.delete(result);
                 this.enrollmentRepo.save(enrollment);
-                return Optional.of(convertEntityToRes(enrollment));
+                return Optional.of(this.mapper.toResponse(enrollment));
             } catch (Exception e) {
-                return Optional.empty();
+                throw new RuntimeException("enrollment update failed");
             }
         }
     }
@@ -93,47 +89,18 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         try {
             this.enrollmentRepo.delete(result);
-            return Optional.of(convertEntityToRes(result));
+            return Optional.of(this.mapper.toResponse(result));
         } catch (Exception e) {
-            return Optional.empty();
+            throw new RuntimeException("delete enrollment failed");
         }
-    }
-
-    private EnrollmentRes convertEntityToRes(EnrollmentEntity entity) {
-        EnrollmentRes result = new EnrollmentRes();
-        BeanUtils.copyProperties(entity, result);
-        if (entity.getCourse().getId() != null) {
-            result.setCourseId(entity.getCourse().getId());
-            result.setCourseName(entity.getCourse().getName());
-        }
-        if (entity.getStudent().getId() != null) {
-            result.setStudentId(entity.getStudent().getId());
-            result.setStudentName(entity.getStudent().getName());
-        }
-
-        return result;
     }
 
     private EnrollmentEntity getEntityById(String studentId, String courseId) {
         EnrollmentId enrollmentId = new EnrollmentId(studentId, courseId);
 
-        EnrollmentEntity result = this.enrollmentRepo.findById(enrollmentId)
-                .orElseThrow(() -> new NotFoundException(String.format("enrollment with id %s not found", enrollmentId)));
-
-        return result;
-    }
-
-    private EnrollmentEntity convertReqToEntity(EnrollmentReq req) {
-        if (this.validator.isDuplicate(req)) {
-            throw new BusinessException("enrollment already exists");
-        } else {
-            StudentEntity student = studentRepo.findById(req.getStudentId())
-                    .orElseThrow(() -> new NotFoundException(String.format("student with id %s not found", req.getStudentId())));
-
-            CourseEntity course = courseRepo.findById(req.getCourseId())
-                    .orElseThrow(() -> new NotFoundException(String.format("course with id %s not found", req.getCourseId())));
-
-            return new EnrollmentEntity(student, course, req.getGrade());
-        }
+        return this.enrollmentRepo.findById(enrollmentId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("enrollment with id %s/%s not found", enrollmentId.getStudentId(), enrollmentId.getCourseId())
+                ));
     }
 }
