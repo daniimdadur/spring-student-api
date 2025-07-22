@@ -1,5 +1,6 @@
 package com.imdadur.student_api.master.department.model;
 
+import com.imdadur.student_api.master.lecturer.model.LecturerEntity;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,9 @@ public class DepartmentEntity {
 
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentEntity> students = new ArrayList<>();
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LecturerEntity> lecturers = new ArrayList<>();
 
     public void addStudent(StudentEntity student) {
         students.add(student);
