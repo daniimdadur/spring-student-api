@@ -3,10 +3,7 @@ package com.imdadur.student_api.master.student.model;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "t_student", uniqueConstraints = {

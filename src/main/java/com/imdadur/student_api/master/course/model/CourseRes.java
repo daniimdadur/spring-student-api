@@ -1,16 +1,14 @@
 package com.imdadur.student_api.master.course.model;
 
 import com.imdadur.student_api.master.enrollment.model.EnrollmentRes;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseRes {
