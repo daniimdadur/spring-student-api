@@ -1,6 +1,6 @@
 package com.imdadur.student_api.master.department.mapper;
 
-import com.imdadur.student_api.exception.BusinessException;
+import com.imdadur.student_api.exception.DuplicateException;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.department.model.DepartmentReq;
 import com.imdadur.student_api.master.department.model.DepartmentRes;
@@ -68,7 +68,7 @@ public class DepartmentMapper {
 
     private void validateDepartment(DepartmentReq req) {
         if (this.departmentRepo.existsByName(req.getName())) {
-            throw new BusinessException(String.format("department name %s already exists", req.getName()));
+            throw new DuplicateException(String.format("department name %s already exists", req.getName()));
         }
     }
 }

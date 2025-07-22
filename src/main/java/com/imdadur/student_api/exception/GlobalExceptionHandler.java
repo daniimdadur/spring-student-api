@@ -30,6 +30,17 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ResponseError> handleBadRequestException(BadRequestException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ResponseError(
+                        HttpStatus.BAD_REQUEST.value(),
+                        HttpStatus.BAD_REQUEST.name(),
+                        ex.getMessage()
+                ));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ResponseError> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity
@@ -41,8 +52,8 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ResponseError> handleBusinessException(BusinessException ex) {
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<ResponseError> handleBusinessException(DuplicateException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ResponseError(

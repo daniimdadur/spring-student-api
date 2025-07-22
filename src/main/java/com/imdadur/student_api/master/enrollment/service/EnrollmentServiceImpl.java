@@ -1,9 +1,6 @@
 package com.imdadur.student_api.master.enrollment.service;
 
-import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
-import com.imdadur.student_api.master.course.model.CourseEntity;
-import com.imdadur.student_api.master.course.repo.CourseRepo;
 import com.imdadur.student_api.master.enrollment.mapper.EnrollmentMapper;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
@@ -11,19 +8,13 @@ import com.imdadur.student_api.master.enrollment.model.EnrollmentReq;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentRes;
 import com.imdadur.student_api.master.enrollment.repo.EnrollmentRepo;
 import com.imdadur.student_api.master.enrollment.validator.EnrollmentValidator;
-import com.imdadur.student_api.master.student.model.StudentEntity;
-import com.imdadur.student_api.master.student.repo.StudentRepo;
-import com.imdadur.student_api.util.CommonUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

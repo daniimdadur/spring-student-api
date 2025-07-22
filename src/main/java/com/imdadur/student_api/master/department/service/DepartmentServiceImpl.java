@@ -1,25 +1,16 @@
 package com.imdadur.student_api.master.department.service;
 
-import com.imdadur.student_api.exception.BusinessException;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.department.mapper.DepartmentMapper;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.department.model.DepartmentReq;
 import com.imdadur.student_api.master.department.model.DepartmentRes;
 import com.imdadur.student_api.master.department.repo.DepartmentRepo;
-import com.imdadur.student_api.master.student.model.StudentEntity;
-import com.imdadur.student_api.master.student.model.StudentRes;
-import com.imdadur.student_api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

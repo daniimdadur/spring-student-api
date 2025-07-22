@@ -1,7 +1,8 @@
-package com.imdadur.student_api.master.student.model;
+package com.imdadur.student_api.master.lecturer.model;
 
+import com.imdadur.student_api.master.course.model.CourseEntity;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
-import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
+import com.imdadur.student_api.master.lecturer_course.model.LecturerCourseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,10 +16,11 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "t_student", uniqueConstraints = {
+@Table(name = "t_lecturer", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-public class StudentEntity {
+public class LecturerEntity {
+
     @Id
     @Column
     private String id;
@@ -29,16 +31,13 @@ public class StudentEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "title")
+    private String title;
+
     @JoinColumn(name = "department_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private DepartmentEntity department;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<EnrollmentEntity> enrollments = new ArrayList<>();
-
-    public StudentEntity(String id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
+    @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL)
+    private List<LecturerCourseEntity> lecturerCourses = new ArrayList<>();
 }

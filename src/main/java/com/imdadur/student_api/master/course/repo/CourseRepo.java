@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface CourseRepo extends JpaRepository<CourseEntity, String> {
-    Optional<CourseEntity> findByCode(String code);
+    boolean existsByCode(String code);
+    boolean existsByName(String name);
 }

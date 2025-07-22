@@ -17,10 +17,11 @@ entity Department {
 }
 
 entity Enrollment {
-  * id : string <<generated>>
+  * id : string <<composite key>>
   --
   * student_id : string <<FK>>
   * course_id : string <<FK>>
+  --
   * grade : string
 }
 
@@ -32,7 +33,29 @@ entity Course {
   * credit : number
 }
 
+entity Lecturer  {
+  * id : string <<generated>>
+  --
+  * name : string
+  * email : string
+  * title : string
+  * department_id : string <<FK>>
+}
+
+entity LecturerCourse {
+  * id : string <<composite key>>
+  --
+  * lecturer_id : string <<FK>>
+  * course_id : string <<FK>>
+  --
+  * role : string
+  * status : string
+}
+
 Student }|--|| Department : "belongs to"
 Student ||--o{ Enrollment : "has"
 Enrollment }|--|| Course : "takes"
+Lecturer }|--|| Department : "belongs to"
+Lecturer |o--|{ LecturerCourse : "teaches"
+Course ||--|{ LecturerCourse : "is taught to"
 @enduml

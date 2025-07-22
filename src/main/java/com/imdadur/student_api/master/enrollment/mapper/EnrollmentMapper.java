@@ -1,6 +1,6 @@
 package com.imdadur.student_api.master.enrollment.mapper;
 
-import com.imdadur.student_api.exception.BusinessException;
+import com.imdadur.student_api.exception.DuplicateException;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.course.model.CourseEntity;
 import com.imdadur.student_api.master.course.repo.CourseRepo;
@@ -38,7 +38,7 @@ public class EnrollmentMapper {
 
     public EnrollmentEntity toEntity(EnrollmentReq request) {
         if (this.validator.isDuplicate(request)) {
-            throw new BusinessException("enrollment already exists");
+            throw new DuplicateException("enrollment already exists");
         }
 
         StudentEntity student = studentRepo.findById(request.getStudentId())
