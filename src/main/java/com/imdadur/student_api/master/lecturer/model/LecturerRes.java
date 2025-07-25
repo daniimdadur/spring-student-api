@@ -1,6 +1,6 @@
 package com.imdadur.student_api.master.lecturer.model;
 
-import com.imdadur.student_api.master.lecturer_course.model.LecturerCourseRes;
+import com.imdadur.student_api.master.lecturer_course.model.LeCouRes;
 import lombok.*;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public class LecturerRes {
     private String title;
     private String departmentId;
     private String departmentName;
-    private List<LecturerCourseRes> lecturerCourses;
+    private List<LeCouRes> lecturerCourses;
 }

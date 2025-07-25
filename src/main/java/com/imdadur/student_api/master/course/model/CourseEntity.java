@@ -1,7 +1,7 @@
 package com.imdadur.student_api.master.course.model;
 
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
-import com.imdadur.student_api.master.lecturer_course.model.LecturerCourseEntity;
+import com.imdadur.student_api.master.lecturer_course.model.LeCouEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,7 +36,7 @@ public class CourseEntity {
     private List<EnrollmentEntity> enrollments = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<LecturerCourseEntity> lecturerCourses = new ArrayList<>();
+    private List<LeCouEntity> lecturerCourses = new ArrayList<>();
 
     public CourseEntity(String id, String name, String code, Integer credit) {
         this.id = id;
