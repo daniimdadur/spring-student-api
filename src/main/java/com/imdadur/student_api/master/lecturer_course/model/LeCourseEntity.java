@@ -15,11 +15,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "t_lecturer_course")
-public class LeCouEntity {
+public class LeCourseEntity {
 
     @NotNull
     @EmbeddedId
-    private LeCouId id;
+    private LeCourseId id;
 
     @ManyToOne
     @MapsId("lecturerId")

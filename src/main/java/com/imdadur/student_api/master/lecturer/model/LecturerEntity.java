@@ -1,7 +1,7 @@
 package com.imdadur.student_api.master.lecturer.model;
 
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
-import com.imdadur.student_api.master.lecturer_course.model.LeCouEntity;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,7 +38,7 @@ public class LecturerEntity {
     private DepartmentEntity department;
 
     @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL)
-    private List<LeCouEntity> lecturerCourses = new ArrayList<>();
+    private List<LeCourseEntity> lecturerCourses = new ArrayList<>();
 
     public LecturerEntity(String id, String name, String email, String title) {
         this.id = id;

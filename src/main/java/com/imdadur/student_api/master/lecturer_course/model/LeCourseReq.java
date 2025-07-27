@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeCouReq {
+public class LeCourseReq {
     @NotBlank(message = "lecturerId can't be empty")
     private String lecturerId;
     @NotBlank(message = "courseId can't be empty")

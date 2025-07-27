@@ -9,9 +9,9 @@ import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
 import com.imdadur.student_api.master.enrollment.repo.EnrollmentRepo;
 import com.imdadur.student_api.master.lecturer.model.LecturerEntity;
 import com.imdadur.student_api.master.lecturer.repo.LecturerRepo;
-import com.imdadur.student_api.master.lecturer_course.model.LeCouEntity;
-import com.imdadur.student_api.master.lecturer_course.model.LeCouId;
-import com.imdadur.student_api.master.lecturer_course.repo.LeCouRepo;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseId;
+import com.imdadur.student_api.master.lecturer_course.repo.LeCourseRepo;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import com.imdadur.student_api.master.student.repo.StudentRepo;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class DbInit implements CommandLineRunner {
     private final EnrollmentRepo enrollmentRepo;
     private final CourseRepo courseRepo;
     private final LecturerRepo lecturerRepo;
-    private final LeCouRepo leCouRepo;
+    private final LeCourseRepo leCouRepo;
 
     @Override
     public void run(String... args) throws Exception {
@@ -74,17 +74,17 @@ public class DbInit implements CommandLineRunner {
         LecturerEntity nunes = new LecturerEntity("a4c4d49dee5b442180bab03092a7b95e", "Nunes", "nunes@gentara.com", "S.Ag");
         LecturerEntity mason = new LecturerEntity("25274ae0ea7045aba6aaa22ee2e400a2", "Mason", "mason@gentara.com", "S.E");
 
-        LeCouId johnJavaId = new LeCouId("96bf08c221f2426ba7da0059c5991792", "94d432c7d0944c259560cdf658ac8888");
-        LeCouId johnPhytonId = new LeCouId("96bf08c221f2426ba7da0059c5991792", "23b8f49b1e55557d984g78f9deg947d1");
-        LeCouId michaelJavaId = new LeCouId("0354767bf7c646b6ad734e910f4e4043", "94d432c7d0944c259560cdf658ac8888");
-        LeCouId palmerHtmlId = new LeCouId("ea7434cd2c6e4aefb04f7c229fa21ad2", "56e1i7ce4h88880gcb7j01i2ghj70cg4");
-        LeCouId masonJsId = new LeCouId("25274ae0ea7045aba6aaa22ee2e400a2", "45d0h6bd3g77779fba6i90h1fgi69bf3");
+        LeCourseId johnJavaId = new LeCourseId("96bf08c221f2426ba7da0059c5991792", "94d432c7d0944c259560cdf658ac8888");
+        LeCourseId johnPhytonId = new LeCourseId("96bf08c221f2426ba7da0059c5991792", "23b8f49b1e55557d984g78f9deg947d1");
+        LeCourseId michaelJavaId = new LeCourseId("0354767bf7c646b6ad734e910f4e4043", "94d432c7d0944c259560cdf658ac8888");
+        LeCourseId palmerHtmlId = new LeCourseId("ea7434cd2c6e4aefb04f7c229fa21ad2", "56e1i7ce4h88880gcb7j01i2ghj70cg4");
+        LeCourseId masonJsId = new LeCourseId("25274ae0ea7045aba6aaa22ee2e400a2", "45d0h6bd3g77779fba6i90h1fgi69bf3");
 
-        LeCouEntity johnJava = new LeCouEntity(johnJavaId, john, java, "Main Lecturer", "Active");
-        LeCouEntity johnPhyton = new LeCouEntity(johnPhytonId, john, python, "Assistant Lecturer", "Active");
-        LeCouEntity michaelJava = new LeCouEntity(michaelJavaId, michael, java, "Assistant Lecturer", "Non-Active");
-        LeCouEntity palmerHtml = new LeCouEntity(palmerHtmlId, palmer, html, "Main Lecturer", "Active");
-        LeCouEntity masonJs = new LeCouEntity(masonJsId, mason, javascript, "Main Lecturer", "Active");
+        LeCourseEntity johnJava = new LeCourseEntity(johnJavaId, john, java, "Main Lecturer", "Active");
+        LeCourseEntity johnPhyton = new LeCourseEntity(johnPhytonId, john, python, "Assistant Lecturer", "Active");
+        LeCourseEntity michaelJava = new LeCourseEntity(michaelJavaId, michael, java, "Assistant Lecturer", "Non-Active");
+        LeCourseEntity palmerHtml = new LeCourseEntity(palmerHtmlId, palmer, html, "Main Lecturer", "Active");
+        LeCourseEntity masonJs = new LeCourseEntity(masonJsId, mason, javascript, "Main Lecturer", "Active");
 
         //students
         List<StudentEntity> studentList = List.of(bruno, alice, bob, carol, dave);
@@ -112,7 +112,7 @@ public class DbInit implements CommandLineRunner {
         carolJava.setCourse(java);
         List<EnrollmentEntity> enrollmentList = List.of(brunoJava, aliceJava, bobJava, daveJava, carolJava);
 
-        List<LeCouEntity> leCouList = List.of(johnJava, johnPhyton, michaelJava, palmerHtml, masonJs);
+        List<LeCourseEntity> leCouList = List.of(johnJava, johnPhyton, michaelJava, palmerHtml, masonJs);
 
         //department
         techno.addStudent(bruno);

@@ -7,8 +7,8 @@ import com.imdadur.student_api.master.course.model.CourseRes;
 import com.imdadur.student_api.master.course.repo.CourseRepo;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentRes;
-import com.imdadur.student_api.master.lecturer_course.model.LeCouEntity;
-import com.imdadur.student_api.master.lecturer_course.model.LeCouRes;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseRes;
 import com.imdadur.student_api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -75,10 +75,10 @@ public class CourseMapper {
         ).collect(Collectors.toList());
     }
 
-    private List<LeCouRes> toLeCourseResponse(List<LeCouEntity> entities) {
+    private List<LeCourseRes> toLeCourseResponse(List<LeCourseEntity> entities) {
         if (entities == null || entities.isEmpty()) return Collections.emptyList();
 
-        return entities.stream().map(leCouEntity -> LeCouRes.builder()
+        return entities.stream().map(leCouEntity -> LeCourseRes.builder()
                 .id(leCouEntity.getId())
                 .lecturerId(leCouEntity.getLecturer().getId())
                 .lecturerName(leCouEntity.getLecturer().getName())

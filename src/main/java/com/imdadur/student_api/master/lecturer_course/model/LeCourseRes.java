@@ -7,8 +7,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LeCouRes {
-    private LeCouId id;
+public class LeCourseRes {
+    private LeCourseId id;
     private String lecturerId;
     private String lecturerName;
     private String courseId;
