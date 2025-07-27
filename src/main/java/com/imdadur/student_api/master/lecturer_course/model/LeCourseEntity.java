@@ -1,14 +1,11 @@
 package com.imdadur.student_api.master.lecturer_course.model;
 
 import com.imdadur.student_api.master.course.model.CourseEntity;
-import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.lecturer.model.LecturerEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -18,11 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "t_lecturer_course")
-public class LecturerCourseEntity {
+public class LeCourseEntity {
 
     @NotNull
     @EmbeddedId
-    private LecturerCourseId id;
+    private LeCourseId id;
 
     @ManyToOne
     @MapsId("lecturerId")
@@ -34,8 +31,8 @@ public class LecturerCourseEntity {
     @JoinColumn(name = "course_id")
     private CourseEntity course;
 
-    @Column(name = "roles")
-    private List<String> roles;
+    @Column(name = "role")
+    private String role;
 
     @Column(name = "status")
     private String status;

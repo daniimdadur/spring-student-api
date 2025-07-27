@@ -7,6 +7,11 @@ import com.imdadur.student_api.master.department.repo.DepartmentRepo;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
 import com.imdadur.student_api.master.enrollment.repo.EnrollmentRepo;
+import com.imdadur.student_api.master.lecturer.model.LecturerEntity;
+import com.imdadur.student_api.master.lecturer.repo.LecturerRepo;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseId;
+import com.imdadur.student_api.master.lecturer_course.repo.LeCourseRepo;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import com.imdadur.student_api.master.student.repo.StudentRepo;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,6 +29,8 @@ public class DbInit implements CommandLineRunner {
     private final StudentRepo studentRepo;
     private final EnrollmentRepo enrollmentRepo;
     private final CourseRepo courseRepo;
+    private final LecturerRepo lecturerRepo;
+    private final LeCourseRepo leCouRepo;
 
     @Override
     public void run(String... args) throws Exception {
@@ -57,48 +63,43 @@ public class DbInit implements CommandLineRunner {
         EnrollmentId daveJavaId = new EnrollmentId("556686e0e9718hge1c04h03d0g2878b8", "94d432c7d0944c259560cdf658ac8888");
 
         EnrollmentEntity brunoJava = new EnrollmentEntity(brunoJavaId, "A");
-
         EnrollmentEntity aliceJava = new EnrollmentEntity(aliceJavaId, "A-");
-
         EnrollmentEntity bobJava = new EnrollmentEntity(bobJavaId, "B");
-
         EnrollmentEntity carolJava = new EnrollmentEntity(carolJavaId, "A");
-
         EnrollmentEntity daveJava = new EnrollmentEntity(daveJavaId, "B+");
 
-        List<StudentEntity> studentList = new ArrayList<>();
-        studentList.add(bruno);
-        studentList.add(alice);
-        studentList.add(bob);
-        studentList.add(carol);
-        studentList.add(dave);
+        LecturerEntity john = new LecturerEntity("96bf08c221f2426ba7da0059c5991792", "John", "john@gentara.com", "S.Kom");
+        LecturerEntity michael = new LecturerEntity("0354767bf7c646b6ad734e910f4e4043", "Michael", "michael@gentara.com", "S.T");
+        LecturerEntity palmer = new LecturerEntity("ea7434cd2c6e4aefb04f7c229fa21ad2", "Palmer", "palmer@gentara.com", "S.Pd");
+        LecturerEntity nunes = new LecturerEntity("a4c4d49dee5b442180bab03092a7b95e", "Nunes", "nunes@gentara.com", "S.Ag");
+        LecturerEntity mason = new LecturerEntity("25274ae0ea7045aba6aaa22ee2e400a2", "Mason", "mason@gentara.com", "S.E");
 
-        List<CourseEntity> courseList = new ArrayList<>();
-        courseList.add(java);
-        courseList.add(python);
-        courseList.add(csharp);
-        courseList.add(javascript);
-        courseList.add(html);
+        LeCourseId johnJavaId = new LeCourseId("96bf08c221f2426ba7da0059c5991792", "94d432c7d0944c259560cdf658ac8888");
+        LeCourseId johnPhytonId = new LeCourseId("96bf08c221f2426ba7da0059c5991792", "23b8f49b1e55557d984g78f9deg947d1");
+        LeCourseId michaelJavaId = new LeCourseId("0354767bf7c646b6ad734e910f4e4043", "94d432c7d0944c259560cdf658ac8888");
+        LeCourseId palmerHtmlId = new LeCourseId("ea7434cd2c6e4aefb04f7c229fa21ad2", "56e1i7ce4h88880gcb7j01i2ghj70cg4");
+        LeCourseId masonJsId = new LeCourseId("25274ae0ea7045aba6aaa22ee2e400a2", "45d0h6bd3g77779fba6i90h1fgi69bf3");
 
-        //department
-        techno.addStudent(bruno);
-        techno.addStudent(alice);
-        techno.addStudent(bob);
-        techno.addStudent(carol);
-        techno.addStudent(dave);
+        LeCourseEntity johnJava = new LeCourseEntity(johnJavaId, john, java, "Main Lecturer", "Active");
+        LeCourseEntity johnPhyton = new LeCourseEntity(johnPhytonId, john, python, "Assistant Lecturer", "Active");
+        LeCourseEntity michaelJava = new LeCourseEntity(michaelJavaId, michael, java, "Assistant Lecturer", "Non-Active");
+        LeCourseEntity palmerHtml = new LeCourseEntity(palmerHtmlId, palmer, html, "Main Lecturer", "Active");
+        LeCourseEntity masonJs = new LeCourseEntity(masonJsId, mason, javascript, "Main Lecturer", "Active");
 
-        List<DepartmentEntity> departmentList = new ArrayList<>();
-        departmentList.add(techno);
+        //students
+        List<StudentEntity> studentList = List.of(bruno, alice, bob, carol, dave);
 
-        try {
-            this.departmentRepo.saveAll(departmentList);
-            this.courseRepo.saveAll(courseList);
-            this.studentRepo.saveAll(studentList);
-        } catch (Exception e) {
-            log.error("dbinit save failed, error: {}", e.getMessage());
-        }
+        //courses
+        List<CourseEntity> courseList = List.of(java, python, csharp, javascript, html);
 
-        //enrollments java
+        List<LecturerEntity> lecturerList = List.of(john, michael, nunes, mason, palmer);
+        john.setDepartment(techno);
+        michael.setDepartment(techno);
+        palmer.setDepartment(techno);
+        nunes.setDepartment(techno);
+        mason.setDepartment(techno);
+
+        //enrollments
         brunoJava.setStudent(bruno);
         aliceJava.setStudent(alice);
         bobJava.setStudent(bob);
@@ -109,13 +110,29 @@ public class DbInit implements CommandLineRunner {
         bobJava.setCourse(java);
         daveJava.setCourse(java);
         carolJava.setCourse(java);
-
         List<EnrollmentEntity> enrollmentList = List.of(brunoJava, aliceJava, bobJava, daveJava, carolJava);
 
+        List<LeCourseEntity> leCouList = List.of(johnJava, johnPhyton, michaelJava, palmerHtml, masonJs);
+
+        //department
+        techno.addStudent(bruno);
+        techno.addStudent(alice);
+        techno.addStudent(bob);
+        techno.addStudent(carol);
+        techno.addStudent(dave);
+        techno.setLecturers(lecturerList);
+
+        List<DepartmentEntity> departmentList = List.of(techno);
+
         try {
+            this.departmentRepo.saveAll(departmentList);
+            this.courseRepo.saveAll(courseList);
+            this.studentRepo.saveAll(studentList);
+            this.lecturerRepo.saveAll(lecturerList);
             this.enrollmentRepo.saveAll(enrollmentList);
+            this.leCouRepo.saveAll(leCouList);
         } catch (Exception e) {
-            log.error("saved enrollments in db init failed, error: {}", e.getMessage());
+            log.error("dbinit save failed, error: {}", e.getMessage());
         }
     }
 }

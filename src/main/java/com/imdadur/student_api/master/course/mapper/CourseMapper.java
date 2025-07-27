@@ -7,6 +7,8 @@ import com.imdadur.student_api.master.course.model.CourseRes;
 import com.imdadur.student_api.master.course.repo.CourseRepo;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentRes;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
+import com.imdadur.student_api.master.lecturer_course.model.LeCourseRes;
 import com.imdadur.student_api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,14 +23,13 @@ public class CourseMapper {
     private final CourseRepo courseRepo;
 
     public CourseRes toResponse(CourseEntity entity) {
-        List<EnrollmentRes> enrollmentResList = this.toEnrollmentResponse(entity.getEnrollments());
-
         return CourseRes.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .code(entity.getCode())
                 .credit(entity.getCredit())
-                .enrollments(enrollmentResList)
+                .enrollments(this.toEnrollmentResponse(entity.getEnrollments()))
+                .lecturerCourses(this.toLeCourseResponse(entity.getLecturerCourses()))
                 .build();
     }
 
@@ -70,6 +71,21 @@ public class CourseMapper {
                 .courseId(enrollment.getCourse().getId())
                 .courseName(enrollment.getCourse().getName())
                 .grade(enrollment.getGrade())
+                .build()
+        ).collect(Collectors.toList());
+    }
+
+    private List<LeCourseRes> toLeCourseResponse(List<LeCourseEntity> entities) {
+        if (entities == null || entities.isEmpty()) return Collections.emptyList();
+
+        return entities.stream().map(leCouEntity -> LeCourseRes.builder()
+                .id(leCouEntity.getId())
+                .lecturerId(leCouEntity.getLecturer().getId())
+                .lecturerName(leCouEntity.getLecturer().getName())
+                .courseId(leCouEntity.getCourse().getId())
+                .courseName(leCouEntity.getCourse().getName())
+                .role(leCouEntity.getRole())
+                .status(leCouEntity.getStatus())
                 .build()
         ).collect(Collectors.toList());
     }

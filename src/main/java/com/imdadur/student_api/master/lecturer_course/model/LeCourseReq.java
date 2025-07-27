@@ -4,20 +4,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LecturerCourseReq {
+public class LeCourseReq {
     @NotBlank(message = "lecturerId can't be empty")
     private String lecturerId;
     @NotBlank(message = "courseId can't be empty")
     private String courseId;
-    @NotNull(message = "roles can't be empty")
-    private List<String> roles;
+    @NotNull(message = "role can't be empty")
+    private String role;
     @NotBlank(message = "status can't be empty")
     private String status;
 }

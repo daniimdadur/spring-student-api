@@ -41,12 +41,8 @@ public class EnrollmentMapper {
             throw new DuplicateException("enrollment already exists");
         }
 
-        StudentEntity student = studentRepo.findById(request.getStudentId())
-                .orElseThrow(() -> new NotFoundException(String.format("student with id %s not found", request.getStudentId())));
-
-        CourseEntity course = courseRepo.findById(request.getCourseId())
-                .orElseThrow(() -> new NotFoundException(String.format("course with id %s not found", request.getCourseId())));
-
+        StudentEntity student = this.getStudent(request.getStudentId());
+        CourseEntity course = this.getCourse(request.getCourseId());
         return EnrollmentEntity.builder()
                 .id(new EnrollmentId(student.getId(), course.getId()))
                 .student(student)
@@ -61,5 +57,15 @@ public class EnrollmentMapper {
         }
 
         return entities.stream().map(this::toResponse).collect(Collectors.toList());
+    }
+
+    private StudentEntity getStudent(String id) {
+        return this.studentRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("student with id %s not found", id)));
+    }
+
+    private CourseEntity getCourse(String id) {
+        return this.courseRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("course with id %s not found", id)));
     }
 }

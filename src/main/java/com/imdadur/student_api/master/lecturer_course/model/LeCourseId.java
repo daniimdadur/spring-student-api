@@ -11,7 +11,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class LecturerCourseId implements Serializable {
+public class LeCourseId implements Serializable {
     private String lecturerId;
     private String courseId;
 }
