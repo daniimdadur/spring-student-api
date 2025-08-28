@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnrollmentRes {
-    private EnrollmentId id;
+    private String id;
     private String studentId;
     private String studentName;
     private String courseId;

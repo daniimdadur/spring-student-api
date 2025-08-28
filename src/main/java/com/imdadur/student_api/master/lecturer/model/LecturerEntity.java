@@ -5,6 +5,7 @@ import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class LecturerEntity {
 
     @Column(name = "title")
     private String title;
+
+    @Column(name = "created_at")
+    private LocalDateTime created;
 
     @JoinColumn(name = "department_id")
     @ManyToOne(fetch = FetchType.LAZY)

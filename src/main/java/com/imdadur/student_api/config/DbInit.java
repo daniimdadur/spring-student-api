@@ -5,7 +5,6 @@ import com.imdadur.student_api.master.course.repo.CourseRepo;
 import com.imdadur.student_api.master.department.model.DepartmentEntity;
 import com.imdadur.student_api.master.department.repo.DepartmentRepo;
 import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
-import com.imdadur.student_api.master.enrollment.model.EnrollmentId;
 import com.imdadur.student_api.master.enrollment.repo.EnrollmentRepo;
 import com.imdadur.student_api.master.lecturer.model.LecturerEntity;
 import com.imdadur.student_api.master.lecturer.repo.LecturerRepo;
@@ -56,17 +55,11 @@ public class DbInit implements CommandLineRunner {
         CourseEntity javascript = new CourseEntity("45d0h6bd3g77779fba6i90h1fgi69bf3", "javascript basics", "J004", 3);
         CourseEntity html = new CourseEntity("56e1i7ce4h88880gcb7j01i2ghj70cg4", "html & css", "H005", 2);
 
-        EnrollmentId brunoJavaId = new EnrollmentId("115286a6a53f4dca9ae980d69e84374f", "94d432c7d0944c259560cdf658ac8888");
-        EnrollmentId aliceJavaId = new EnrollmentId("225386b7b64e5edbaf091e70a7f95485", "94d432c7d0944c259560cdf658ac8888");
-        EnrollmentId bobJavaId = new EnrollmentId("335486c8c75f6fecb0a82f81b8e06596", "94d432c7d0944c259560cdf658ac8888");
-        EnrollmentId carolJavaId = new EnrollmentId("445586d9d8607gfd0b93g92c9f1767a7", "94d432c7d0944c259560cdf658ac8888");
-        EnrollmentId daveJavaId = new EnrollmentId("556686e0e9718hge1c04h03d0g2878b8", "94d432c7d0944c259560cdf658ac8888");
-
-        EnrollmentEntity brunoJava = new EnrollmentEntity(brunoJavaId, "A");
-        EnrollmentEntity aliceJava = new EnrollmentEntity(aliceJavaId, "A-");
-        EnrollmentEntity bobJava = new EnrollmentEntity(bobJavaId, "B");
-        EnrollmentEntity carolJava = new EnrollmentEntity(carolJavaId, "A");
-        EnrollmentEntity daveJava = new EnrollmentEntity(daveJavaId, "B+");
+        EnrollmentEntity brunoJava = new EnrollmentEntity("3b879a2f64c4b57b7d159a2e3b879a2","A");
+        EnrollmentEntity aliceJava = new EnrollmentEntity("7c6d4e5f2a1b9c8d3e5f2a1b9c8d3e5f", "A-");
+        EnrollmentEntity bobJava = new EnrollmentEntity("a1b2c3d4e5f67g8h9i0j1k2l3m4n5o6p", "B");
+        EnrollmentEntity carolJava = new EnrollmentEntity("b7d159a2e3b879a2f64c4b57b7d159a2", "A");
+        EnrollmentEntity daveJava = new EnrollmentEntity("5f2a1b9c8d3e7c6d4e5f2a1b9c8d3e5f", "B+");
 
         LecturerEntity john = new LecturerEntity("96bf08c221f2426ba7da0059c5991792", "John", "john@gentara.com", "S.Kom");
         LecturerEntity michael = new LecturerEntity("0354767bf7c646b6ad734e910f4e4043", "Michael", "michael@gentara.com", "S.T");

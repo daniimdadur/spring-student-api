@@ -15,6 +15,7 @@ import com.imdadur.student_api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +53,7 @@ public class StudentMapper {
                 .id(CommonUtil.getUUID())
                 .name(request.getName())
                 .email(request.getEmail())
+                .created(LocalDateTime.now())
                 .department(department)
                 .build();
     }
@@ -64,6 +66,7 @@ public class StudentMapper {
                 .id(entity.getId())
                 .name(request.getName())
                 .email(entity.getEmail())
+                .created(entity.getCreated())
                 .department(department)
                 .build();
     }

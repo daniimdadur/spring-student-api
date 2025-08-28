@@ -5,6 +5,7 @@ import com.imdadur.student_api.master.enrollment.model.EnrollmentEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class StudentEntity {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "created_at")
+    private LocalDateTime created;
 
     @JoinColumn(name = "department_id")
     @ManyToOne(fetch = FetchType.LAZY)

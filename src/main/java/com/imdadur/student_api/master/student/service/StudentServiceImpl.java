@@ -20,7 +20,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentRes> get() {
-        return this.mapper.toListResponse(this.studentRepo.findAll());
+        return this.mapper.toListResponse(this.studentRepo.findAllByOrderByCreatedAsc());
     }
 
     @Override

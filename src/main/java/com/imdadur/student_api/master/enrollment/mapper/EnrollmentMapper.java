@@ -11,9 +11,11 @@ import com.imdadur.student_api.master.enrollment.model.EnrollmentRes;
 import com.imdadur.student_api.master.enrollment.validator.EnrollmentValidator;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import com.imdadur.student_api.master.student.repo.StudentRepo;
+import com.imdadur.student_api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,10 +46,11 @@ public class EnrollmentMapper {
         StudentEntity student = this.getStudent(request.getStudentId());
         CourseEntity course = this.getCourse(request.getCourseId());
         return EnrollmentEntity.builder()
-                .id(new EnrollmentId(student.getId(), course.getId()))
+                .id(CommonUtil.getUUID())
                 .student(student)
                 .course(course)
                 .grade(request.getGrade())
+                .created(LocalDateTime.now())
                 .build();
     }
 
