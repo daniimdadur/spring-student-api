@@ -22,7 +22,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseRes> get() {
-        return this.mapper.toListResponse(this.courseRepo.findAll());
+        return this.mapper.toListResponse(this.courseRepo.findAllByOrderByCreatedAsc());
     }
 
     @Override

@@ -30,8 +30,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Optional<EnrollmentRes> getById(String studentId, String courseId) {
-        EnrollmentEntity result = this.getEntityById(studentId, courseId);
+    public Optional<EnrollmentRes> getById(String id) {
+        EnrollmentEntity result = this.getEntityById(id);
 
         return Optional.of(this.mapper.toResponse(result));
     }
@@ -49,9 +49,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    @Transactional
-    public Optional<EnrollmentRes> update(EnrollmentReq request, String studentId, String courseId) {
-        EnrollmentEntity result = this.getEntityById(studentId, courseId);
+    public Optional<EnrollmentRes> update(EnrollmentReq request, String id) {
+        EnrollmentEntity result = this.getEntityById(id);
 
         if (this.validator.isSameId(request, result)) {
             result.setGrade(request.getGrade());
@@ -75,8 +74,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Optional<EnrollmentRes> delete(String studentId, String courseId) {
-        EnrollmentEntity result = this.getEntityById(studentId, courseId);
+    public Optional<EnrollmentRes> delete(String id) {
+        EnrollmentEntity result = this.getEntityById(id);
 
         try {
             this.enrollmentRepo.delete(result);
@@ -86,12 +85,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
     }
 
-    private EnrollmentEntity getEntityById(String studentId, String courseId) {
-        EnrollmentId enrollmentId = new EnrollmentId(studentId, courseId);
+    private EnrollmentEntity getEntityById(String id) {
 
-        return this.enrollmentRepo.findById(enrollmentId)
+        return this.enrollmentRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("enrollment with id %s/%s not found", enrollmentId.getStudentId(), enrollmentId.getCourseId())
+                        String.format("enrollment with id %s not found", id)
                 ));
     }
 }

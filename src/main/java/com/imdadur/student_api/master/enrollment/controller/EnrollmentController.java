@@ -26,10 +26,9 @@ public class EnrollmentController extends BaseController<EnrollmentRes> {
         return getResponse(result);
     }
 
-    @GetMapping("/{studentId}/{courseId}")
-    public ResponseEntity<Response> get(@PathVariable(value = "studentId") @NotBlank String  studentId,
-                                        @PathVariable(value = "courseId") @NotBlank String courseId) {
-        Optional<EnrollmentRes> result = this.enrollmentService.getById(studentId, courseId);
+    @GetMapping("/{id}")
+    public ResponseEntity<Response> get(@PathVariable(value = "id") @NotBlank String  id) {
+        Optional<EnrollmentRes> result = this.enrollmentService.getById(id);
         return getResponse(result);
     }
 
@@ -39,18 +38,16 @@ public class EnrollmentController extends BaseController<EnrollmentRes> {
         return getResponse(result);
     }
 
-    @PatchMapping("/{studentId}/{courseId}")
-    public ResponseEntity<Response> patch(@PathVariable(value = "studentId") @NotBlank String studentId,
-                                          @PathVariable(value = "courseId") @NotBlank String courseId,
+    @PatchMapping("/{id}")
+    public ResponseEntity<Response> patch(@PathVariable(value = "id") @NotBlank String id,
                                           @RequestBody @Valid EnrollmentReq request) {
-        Optional<EnrollmentRes> result = this.enrollmentService.update(request, studentId, courseId);
+        Optional<EnrollmentRes> result = this.enrollmentService.update(request, id);
         return getResponse(result);
     }
 
-    @DeleteMapping("/{studentId}/{courseId}")
-    public ResponseEntity<Response> delete(@PathVariable(value = "studentId") @NotBlank String  studentId,
-                                           @PathVariable(value = "courseId") @NotBlank String courseId) {
-        Optional<EnrollmentRes> result = this.enrollmentService.delete(studentId, courseId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response> delete(@PathVariable(value = "id") @NotBlank String  id) {
+        Optional<EnrollmentRes> result = this.enrollmentService.delete(id);
         return getResponse(result);
     }
 }

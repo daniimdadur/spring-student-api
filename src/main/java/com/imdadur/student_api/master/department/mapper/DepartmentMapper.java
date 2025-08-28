@@ -13,6 +13,7 @@ import com.imdadur.student_api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class DepartmentMapper {
         return DepartmentEntity.builder()
                 .id(CommonUtil.getUUID())
                 .name(request.getName())
+                .created(LocalDateTime.now())
                 .build();
     }
 
@@ -52,6 +54,7 @@ public class DepartmentMapper {
         return DepartmentEntity.builder()
                 .id(entity.getId())
                 .name(request.getName())
+                .created(entity.getCreated())
                 .build();
     }
 

@@ -20,7 +20,7 @@ public class LecturerServiceImpl implements LecturerService {
 
     @Override
     public List<LecturerRes> get() {
-        return this.mapper.toListResponse(this.lecturerRepo.findAll());
+        return this.mapper.toListResponse(this.lecturerRepo.findAllByOrderByCreatedAsc());
     }
 
     @Override

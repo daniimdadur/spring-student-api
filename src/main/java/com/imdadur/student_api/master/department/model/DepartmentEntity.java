@@ -4,7 +4,9 @@ import com.imdadur.student_api.master.lecturer.model.LecturerEntity;
 import com.imdadur.student_api.master.student.model.StudentEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,9 @@ public class DepartmentEntity {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "created_at")
+    private LocalDateTime created;
 
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentEntity> students = new ArrayList<>();

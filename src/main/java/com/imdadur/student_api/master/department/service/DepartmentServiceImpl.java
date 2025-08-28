@@ -20,7 +20,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<DepartmentRes> get() {
-        return this.mapper.toResponseList(this.departmentRepo.findAll());
+        return this.mapper.toResponseList(this.departmentRepo.findAllByOrderByCreatedAsc());
     }
 
     @Override

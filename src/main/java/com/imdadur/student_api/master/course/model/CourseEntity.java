@@ -5,6 +5,7 @@ import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class CourseEntity {
 
     @Column(name = "credit")
     private Integer credit;
+
+    @Column(name = "created_at")
+    private LocalDateTime created;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<EnrollmentEntity> enrollments = new ArrayList<>();
