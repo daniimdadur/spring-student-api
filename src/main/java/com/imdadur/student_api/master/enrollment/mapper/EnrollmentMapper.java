@@ -54,6 +54,20 @@ public class EnrollmentMapper {
                 .build();
     }
 
+    public EnrollmentEntity toEntity(EnrollmentReq request, EnrollmentEntity entity) {
+        if (this.validator.isDuplicate(request)) {
+            throw new DuplicateException("enrollment already exists");
+        }
+
+        return EnrollmentEntity.builder()
+                .id(entity.getId())
+                .student(this.getStudent(request.getStudentId()))
+                .course(this.getCourse(request.getCourseId()))
+                .grade(request.getGrade())
+                .created(entity.getCreated())
+                .build();
+    }
+
     public List<EnrollmentRes> toResponseList(List<EnrollmentEntity> entities) {
         if (entities == null || entities.isEmpty()) {
             return Collections.emptyList();

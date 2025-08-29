@@ -7,7 +7,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 public class GradeValidator implements ConstraintValidator<ValidGrade, String> {
-    private static final Pattern GRADE_PATTERN = Pattern.compile("^[A-D][+-]?|F$");
+    private static final Pattern GRADE_PATTERN = Pattern.compile("^(?:[A-D][+-]?|F)$");
 
     @Override
     public void initialize(ValidGrade constraintAnnotation) {

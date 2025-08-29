@@ -53,7 +53,7 @@ public class CourseMapper {
     }
 
     public CourseEntity toEntity(CourseReq request, CourseEntity entity) {
-        validateCourse(request);
+        validateCourse(request, entity.getId());
 
         return CourseEntity.builder()
                 .id(entity.getId())
@@ -101,4 +101,14 @@ public class CourseMapper {
             throw new DuplicateException(String.format("name %s already exists", request.getName()));
         }
     }
+
+    private void validateCourse(CourseReq request, String id) {
+        if (this.courseRepo.existsByCodeAndIdNot(request.getCode(), id)) {
+            throw new DuplicateException(String.format("code %s already exists", request.getCode()));
+        }
+        if (this.courseRepo.existsByNameAndIdNot(request.getName(), id)) {
+            throw new DuplicateException(String.format("name %s already exists", request.getName()));
+        }
+    }
+
 }

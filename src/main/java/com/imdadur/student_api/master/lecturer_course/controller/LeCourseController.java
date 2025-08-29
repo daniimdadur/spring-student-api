@@ -7,6 +7,7 @@ import com.imdadur.student_api.master.lecturer_course.model.LeCourseRes;
 import com.imdadur.student_api.master.lecturer_course.service.LeCourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/api/v1/lecourse")
 public class LeCourseController extends BaseController<LeCourseRes> {
     private final LeCourseService leCourseService;
@@ -24,10 +26,9 @@ public class LeCourseController extends BaseController<LeCourseRes> {
         return getResponse(result);
     }
 
-    @GetMapping("/{lecturerId}/{courseId}")
-    public ResponseEntity<Response> get(@PathVariable("lecturerId") String lecturerId,
-                                        @PathVariable("courseId") String  courseId) {
-        Optional<LeCourseRes> result = this.leCourseService.getById(lecturerId, courseId);
+    @GetMapping("/{id}")
+    public ResponseEntity<Response> get(@PathVariable("id") String id) {
+        Optional<LeCourseRes> result = this.leCourseService.getById(id);
         return getResponse(result);
     }
 
@@ -37,18 +38,16 @@ public class LeCourseController extends BaseController<LeCourseRes> {
         return getResponse(result);
     }
 
-    @PatchMapping("/{lecturerId}/{courseId}")
-    public ResponseEntity<Response> patch(@PathVariable("lecturerId") String lecturerId,
-                                          @PathVariable("courseId") String  courseId,
+    @PatchMapping("/{id}")
+    public ResponseEntity<Response> patch(@PathVariable("id") String id,
                                           @RequestBody LeCourseReq request) {
-        Optional<LeCourseRes> result = this.leCourseService.update(request, lecturerId, courseId);
+        Optional<LeCourseRes> result = this.leCourseService.update(request, id);
         return getResponse(result);
     }
 
-    @DeleteMapping("/{lecturerId}/{courseId}")
-    public ResponseEntity<Response> delete(@PathVariable("lecturerId") String lecturerId,
-                                           @PathVariable("courseId") String  courseId) {
-        Optional<LeCourseRes> result = this.leCourseService.delete(lecturerId, courseId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response> delete(@PathVariable("id") String id) {
+        Optional<LeCourseRes> result = this.leCourseService.delete(id);
         return getResponse(result);
     }
 }

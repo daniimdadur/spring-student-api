@@ -3,11 +3,9 @@ package com.imdadur.student_api.master.lecturer_course.service;
 import com.imdadur.student_api.exception.NotFoundException;
 import com.imdadur.student_api.master.lecturer_course.mapper.LeCourseMapper;
 import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
-import com.imdadur.student_api.master.lecturer_course.model.LeCourseId;
 import com.imdadur.student_api.master.lecturer_course.model.LeCourseReq;
 import com.imdadur.student_api.master.lecturer_course.model.LeCourseRes;
 import com.imdadur.student_api.master.lecturer_course.repo.LeCourseRepo;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +20,12 @@ public class LeCourseServiceImpl implements LeCourseService {
 
     @Override
     public List<LeCourseRes> get() {
-        return this.mapper.toResponseList(this.leCourseRepo.findAll());
+        return this.mapper.toResponseList(this.leCourseRepo.findAllByOrderByCreatedAsc());
     }
 
     @Override
-    public Optional<LeCourseRes> getById(String lecturerId, String courseId) {
-        LeCourseEntity result = this.getEntityById(lecturerId, courseId);
+    public Optional<LeCourseRes> getById(String id) {
+        LeCourseEntity result = this.getEntityById(id);
 
         return Optional.of(this.mapper.toResponse(result));
     }
@@ -44,13 +42,21 @@ public class LeCourseServiceImpl implements LeCourseService {
     }
 
     @Override
-    @Transactional
-    public Optional<LeCourseRes> update(LeCourseReq request, String lecturerId, String courseId) {
-        LeCourseEntity result = this.getEntityById(lecturerId, courseId);
+    public Optional<LeCourseRes> update(LeCourseReq request, String id) {
+        LeCourseEntity entity = this.getEntityById(id);
 
-        if (this.mapper.isSameId(request, result)) {
-            result.setRole(request.getRole());
-            result.setStatus(request.getStatus());
+        if (this.mapper.isSameId(request, entity)) {
+            entity.setRole(request.getRole());
+            entity.setStatus(request.getStatus());
+
+            try {
+                this.leCourseRepo.save(entity);
+                return Optional.of(this.mapper.toResponse(entity));
+            } catch (Exception e) {
+                throw new RuntimeException("error updating lecturer course", e);
+            }
+        } else {
+            LeCourseEntity result = this.mapper.toEntity(request, entity);
 
             try {
                 this.leCourseRepo.save(result);
@@ -58,21 +64,12 @@ public class LeCourseServiceImpl implements LeCourseService {
             } catch (Exception e) {
                 throw new RuntimeException("error updating lecturer course", e);
             }
-        } else {
-            LeCourseEntity newEntity = this.mapper.toEntity(request);
-            try {
-                this.leCourseRepo.delete(result);
-                this.leCourseRepo.save(newEntity);
-                return Optional.of(this.mapper.toResponse(newEntity));
-            } catch (Exception e) {
-                throw new RuntimeException("error updating lecturer course", e);
-            }
         }
     }
 
     @Override
-    public Optional<LeCourseRes> delete(String lecturerId, String courseId) {
-        LeCourseEntity result = this.getEntityById(lecturerId, courseId);
+    public Optional<LeCourseRes> delete(String id) {
+        LeCourseEntity result = this.getEntityById(id);
 
         try {
             this.leCourseRepo.delete(result);
@@ -82,10 +79,10 @@ public class LeCourseServiceImpl implements LeCourseService {
         }
     }
 
-    private LeCourseEntity getEntityById(String lecturerId, String courseId) {
-        return this.leCourseRepo.findById(new LeCourseId(lecturerId, courseId))
+    private LeCourseEntity getEntityById(String id) {
+        return this.leCourseRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("lecturer course with id %s/%s not found", lecturerId, courseId)
+                        String.format("lecturer course with id %s not found", id)
                 ));
     }
 }

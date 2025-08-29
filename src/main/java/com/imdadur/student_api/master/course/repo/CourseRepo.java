@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface CourseRepo extends JpaRepository<CourseEntity, String> {
     boolean existsByCode(String code);
     boolean existsByName(String name);
+    boolean existsByCodeAndIdNot(String code, String id);
+    boolean existsByNameAndIdNot(String name, String id);
     List<CourseEntity> findAllByOrderByCreatedAsc();
 }

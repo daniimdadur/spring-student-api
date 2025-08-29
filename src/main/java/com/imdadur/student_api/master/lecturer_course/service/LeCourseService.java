@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface LeCourseService {
     List<LeCourseRes> get();
-    Optional<LeCourseRes> getById(String lecturerId, String courseId);
+    Optional<LeCourseRes> getById(String id);
     Optional<LeCourseRes> save(LeCourseReq request);
-    Optional<LeCourseRes> update(LeCourseReq request, String lecturerId, String courseId);
-    Optional<LeCourseRes> delete(String lecturerId, String courseId);
+    Optional<LeCourseRes> update(LeCourseReq request, String id);
+    Optional<LeCourseRes> delete(String id);
 }

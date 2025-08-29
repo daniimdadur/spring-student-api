@@ -67,17 +67,11 @@ public class DbInit implements CommandLineRunner {
         LecturerEntity nunes = new LecturerEntity("a4c4d49dee5b442180bab03092a7b95e", "Nunes", "nunes@gentara.com", "S.Ag");
         LecturerEntity mason = new LecturerEntity("25274ae0ea7045aba6aaa22ee2e400a2", "Mason", "mason@gentara.com", "S.E");
 
-        LeCourseId johnJavaId = new LeCourseId("96bf08c221f2426ba7da0059c5991792", "94d432c7d0944c259560cdf658ac8888");
-        LeCourseId johnPhytonId = new LeCourseId("96bf08c221f2426ba7da0059c5991792", "23b8f49b1e55557d984g78f9deg947d1");
-        LeCourseId michaelJavaId = new LeCourseId("0354767bf7c646b6ad734e910f4e4043", "94d432c7d0944c259560cdf658ac8888");
-        LeCourseId palmerHtmlId = new LeCourseId("ea7434cd2c6e4aefb04f7c229fa21ad2", "56e1i7ce4h88880gcb7j01i2ghj70cg4");
-        LeCourseId masonJsId = new LeCourseId("25274ae0ea7045aba6aaa22ee2e400a2", "45d0h6bd3g77779fba6i90h1fgi69bf3");
-
-        LeCourseEntity johnJava = new LeCourseEntity(johnJavaId, john, java, "Main Lecturer", "Active");
-        LeCourseEntity johnPhyton = new LeCourseEntity(johnPhytonId, john, python, "Assistant Lecturer", "Active");
-        LeCourseEntity michaelJava = new LeCourseEntity(michaelJavaId, michael, java, "Assistant Lecturer", "Non-Active");
-        LeCourseEntity palmerHtml = new LeCourseEntity(palmerHtmlId, palmer, html, "Main Lecturer", "Active");
-        LeCourseEntity masonJs = new LeCourseEntity(masonJsId, mason, javascript, "Main Lecturer", "Active");
+        LeCourseEntity johnJava = new LeCourseEntity("2a7c5b8e9d4f1a2c3d4e5f6a7b8c9d0e", john, java, "Main Lecturer", "Active");
+        LeCourseEntity johnPhyton = new LeCourseEntity("f1d9e8c7b6a54b3c2d1e0f9a8b7c6d5e", john, python, "Assistant Lecturer", "Active");
+        LeCourseEntity michaelJava = new LeCourseEntity("4f8e1b5d6a7c3e9b0d2f5a6c1e8b3d7f", michael, java, "Assistant Lecturer", "Non-Active");
+        LeCourseEntity palmerHtml = new LeCourseEntity("c9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4", palmer, html, "Main Lecturer", "Active");
+        LeCourseEntity masonJs = new LeCourseEntity("e0f9d8c7b6a51d2c3e4f5a6b7c8d9e0f", mason, javascript, "Main Lecturer", "Active");
 
         //students
         List<StudentEntity> studentList = List.of(bruno, alice, bob, carol, dave);

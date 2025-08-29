@@ -7,13 +7,14 @@ import com.imdadur.student_api.master.course.repo.CourseRepo;
 import com.imdadur.student_api.master.lecturer.model.LecturerEntity;
 import com.imdadur.student_api.master.lecturer.repo.LecturerRepo;
 import com.imdadur.student_api.master.lecturer_course.model.LeCourseEntity;
-import com.imdadur.student_api.master.lecturer_course.model.LeCourseId;
 import com.imdadur.student_api.master.lecturer_course.model.LeCourseReq;
 import com.imdadur.student_api.master.lecturer_course.model.LeCourseRes;
 import com.imdadur.student_api.master.lecturer_course.repo.LeCourseRepo;
+import com.imdadur.student_api.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,11 +46,27 @@ public class LeCourseMapper {
         LecturerEntity lecturer = this.getLecturer(request.getLecturerId());
         CourseEntity course = this.getCourse(request.getCourseId());
         return LeCourseEntity.builder()
-                .id(new LeCourseId(lecturer.getId(), course.getId()))
+                .id(CommonUtil.getUUID())
                 .lecturer(lecturer)
                 .course(course)
                 .role(request.getRole())
                 .status(request.getStatus())
+                .created(LocalDateTime.now())
+                .build();
+    }
+
+    public LeCourseEntity toEntity(LeCourseReq request, LeCourseEntity entity) {
+        if (this.isDuplicate(request)) {
+            throw new DuplicateException("leCourse already exists");
+        }
+
+        return LeCourseEntity.builder()
+                .id(entity.getId())
+                .lecturer(this.getLecturer(request.getLecturerId()))
+                .course(this.getCourse(request.getCourseId()))
+                .role(request.getRole())
+                .status(request.getStatus())
+                .created(entity.getCreated())
                 .build();
     }
 
@@ -70,7 +87,7 @@ public class LeCourseMapper {
     }
 
     private boolean isDuplicate(LeCourseReq request) {
-        return this.leCouRepo.existsById(new LeCourseId(request.getLecturerId(), request.getCourseId()));
+        return this.leCouRepo.existsByLecturerIdAndCourseId(request.getLecturerId(), request.getCourseId());
     }
 
     public boolean isSameId(LeCourseReq request, LeCourseEntity entity) {

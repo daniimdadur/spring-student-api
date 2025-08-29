@@ -26,7 +26,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public List<EnrollmentRes> get() {
-        return this.mapper.toResponseList(this.enrollmentRepo.findAll());
+        return this.mapper.toResponseList(this.enrollmentRepo.findAllByOrderByCreatedAsc());
     }
 
     @Override
@@ -50,23 +50,23 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Optional<EnrollmentRes> update(EnrollmentReq request, String id) {
-        EnrollmentEntity result = this.getEntityById(id);
+        EnrollmentEntity entity = this.getEntityById(id);
 
-        if (this.validator.isSameId(request, result)) {
-            result.setGrade(request.getGrade());
+        if (this.validator.isSameId(request, entity)) {
+            entity.setGrade(request.getGrade());
 
             try {
-                this.enrollmentRepo.save(result);
-                return Optional.of(this.mapper.toResponse(result));
+                this.enrollmentRepo.save(entity);
+                return Optional.of(this.mapper.toResponse(entity));
             } catch (Exception e) {
                 throw new RuntimeException("enrollment update failed");
             }
         } else {
-            EnrollmentEntity enrollment = this.mapper.toEntity(request);
+            EnrollmentEntity result = this.mapper.toEntity(request, entity);
+
             try {
-                this.enrollmentRepo.delete(result);
-                this.enrollmentRepo.save(enrollment);
-                return Optional.of(this.mapper.toResponse(enrollment));
+                this.enrollmentRepo.save(result);
+                return Optional.of(this.mapper.toResponse(result));
             } catch (Exception e) {
                 throw new RuntimeException("enrollment update failed");
             }
@@ -86,7 +86,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     private EnrollmentEntity getEntityById(String id) {
-
         return this.enrollmentRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("enrollment with id %s not found", id)
